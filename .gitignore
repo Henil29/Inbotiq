@@ -1,0 +1,64 @@
+# Environment files
+.env
+!.env.example
+
+# Node modules (anywhere)
+node_modules/
+
+# Logs
+logs/
+*.log
+*.log.*
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Build outputs
+build/
+dist/
+# Next.js (match anywhere)
+**/.next/
+**/out/
+
+# Coverage
+coverage/
+
+# Caches and temporary files
+.cache/
+.eslintcache
+.turbo/
+.parcel-cache/
+.tmp/
+tmp/
+temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# Package tarballs
+*.tgz
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Deployment/platform folders
+.vercel
+.netlify
+
+# Misc
+*.swp
+*.swo
