@@ -42,18 +42,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = async () => {
     try {
-      const { data } = await api.get("/auth/me");
+      const { data } = await api.get("/auth/me", { withCredentials: true });
       setUser(data?.user || data); // support {user} or user directly
     } catch (err) {
       console.error("/auth/me failed:", handleError(err).message);
       setUser(null);
-      setToken(null);
-      if (typeof window !== "undefined") localStorage.removeItem(TOKEN_KEY);
+      // don't drop token immediately on 401 so login redirect logic can run
     }
   };
 
   const login = async (email: string, password: string) => {
-    const { data } = await api.post("/auth/login", { email, password });
+    const { data } = await api.post("/auth/login", { email, password }, { withCredentials: true });
     const t = (data?.token as string) || (data?.accessToken as string);
     if (t) {
       if (typeof window !== "undefined") localStorage.setItem(TOKEN_KEY, t);
@@ -66,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (name: string, email: string, password: string, role?: "admin" | "user") => {
     const payload: Record<string, unknown> = { name, email, password };
     if (role) payload.role = role;
-    const { data } = await api.post("/auth/register", payload);
+    const { data } = await api.post("/auth/register", payload, { withCredentials: true });
     const t = (data?.token as string) || (data?.accessToken as string);
     if (t) {
       if (typeof window !== "undefined") localStorage.setItem(TOKEN_KEY, t);

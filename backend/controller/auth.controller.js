@@ -86,10 +86,12 @@ export const logoutUser = (req, res) => {
     if (!req.cookies.token) {
         return res.status(400).json({ message: 'No active session' });
     }
+    const isProd = process.env.NODE_ENV === 'production';
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax',
+        path: '/',
     });
     return res.status(200).json({ message: 'User logged out successfully' });
 };
