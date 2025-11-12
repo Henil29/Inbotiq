@@ -17,7 +17,7 @@ type AuthContextType = {
   initializing: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, role?: "admin" | "user") => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 };
@@ -63,8 +63,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await refreshUser();
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const { data } = await api.post("/auth/register", { name, email, password });
+  const register = async (name: string, email: string, password: string, role?: "admin" | "user") => {
+    const payload: Record<string, unknown> = { name, email, password };
+    if (role) payload.role = role;
+    const { data } = await api.post("/auth/register", payload);
     const t = (data?.token as string) || (data?.accessToken as string);
     if (t) {
       if (typeof window !== "undefined") localStorage.setItem(TOKEN_KEY, t);

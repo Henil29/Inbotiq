@@ -17,6 +17,7 @@ const schema = z
     email: z.string().email("Invalid email"),
     password: z.string().min(6, "Min 6 characters"),
     confirmPassword: z.string().min(6, "Min 6 characters"),
+    isAdmin: z.boolean().optional().default(false),
   })
   .refine((d) => d.password === d.confirmPassword, {
     path: ["confirmPassword"],
@@ -38,7 +39,8 @@ export default function RegisterForm() {
   const onSubmit = async (values: FormValues) => {
     setError(null);
     try {
-      await signup(values.name, values.email, values.password);
+      const role = values.isAdmin ? "admin" : undefined;
+      await signup(values.name, values.email, values.password, role);
       toast.success("Account created");
       router.push("/dashboard");
     } catch (err) {
@@ -65,6 +67,14 @@ export default function RegisterForm() {
         {...register("confirmPassword")}
         error={errors.confirmPassword?.message}
       />
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          {...register("isAdmin")}
+          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+        <span>Do you want to be an admin?</span>
+      </label>
       <Button type="submit" loading={isSubmitting} className="w-full">
         Create Account
       </Button>

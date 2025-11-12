@@ -9,10 +9,10 @@ import { errorHandler } from './middlewares/errorHandler.js';
 const app = express();
 
 // Middlewares
-// CORS configuration: allow configured origins (comma-separated) or fallback to localhost:3001
+// CORS configuration: allow configured origins (comma-separated) or fallback to localhost:3000
 app.use(cors({
     origin: (origin, callback) => {
-        const allowed = (process.env.CORS_ORIGIN || 'http://localhost:3001')
+        const allowed = (process.env.CORS_ORIGIN || 'http://localhost:3000')
             .split(',')
             .map(o => o.trim());
         // If no origin (same-origin or curl) or origin is in allowed list, accept
